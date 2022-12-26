@@ -73,7 +73,7 @@ require("header.php");
         $search_name_cmd = "";
         if (isset($_GET['searched_id']) && $_GET['searched_id'] != "" ){
             $search_name= $_GET['searched_id'];
-            $search_name_cmd= $search_name_cmd." WHERE name='".$search_name."'";
+            $search_name_cmd= $search_name_cmd." WHERE name LIKE '"."%".$search_name."%"."'";
             $alt_text_filter = $alt_text_filter."    "."<br><li> Search By Product : $search_name";
         }
     ?>
@@ -87,6 +87,7 @@ require("header.php");
                 <td> </td>
                 <td><b>Picture</b></td>
                 <td><b>Price(Baht)</b></td>  
+                <td><b>In-Stock</b></td>  
                 <td><b>Quantity</b></td>    <!-- ใส่ + - จำนวนในนี้ -->
             </tr>
 
@@ -104,13 +105,14 @@ require("header.php");
                 }
                 
                 #to display n result(s) found
-                echo "<p>$alt_text_filter<br></p>" ;
+                echo "<div style='Color:Green'><p>$alt_text_filter<br></p></div>" ;
                 while($list_show = mysqli_fetch_array($result_show)) 
                 {
                     $mer_id = $list_show["id"];
                     $mer_name = $list_show["name"]; //"name" is a column in tbl_merchandises from database 
                     $mer_pic = $list_show["picture"];
                     $mer_price = $list_show["price"];
+                    $mer_stock = $list_show["stock"];
                     $mer_url ="merchandise1.php/?mer_id=".$mer_id;
                     
                     if($mer_pic != "") {
@@ -126,6 +128,7 @@ require("header.php");
                                     <td><a href=$mer_url>info</a></td>
                                     <td>$mer_pic</td>
                                     <td>$mer_price</td>
+                                    <td>$mer_stock</td>
                                     <td><input type='number' name='id_quantity[$mer_id]' min=0 value='$quantity' style='width: 4em' required></td>
                                 </tr>
                             ");
@@ -137,6 +140,7 @@ require("header.php");
                                 <td><a href=$mer_url>info</a></td>
                                 <td>$mer_pic</td>
                                 <td>$mer_price</td>
+                                <td>$mer_stock</td>
                                 <td><input type='number' name='id_quantity[$mer_id]' min=0 value=0 style='width: 4em' required></td>
                             </tr>
                         ");
@@ -147,7 +151,7 @@ require("header.php");
             ?>
         </table>
         <br><input type="submit" value="Check out">
-        <br><br><a href = "homepage.php"> Back </a>
+        <br><br><a href = "homepage.php" style="color:blue;"> Back </a>
     </form>
     
 </body>

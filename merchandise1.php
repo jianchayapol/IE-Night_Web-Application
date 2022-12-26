@@ -42,6 +42,17 @@ echo("<a href = 'homepage_logged.php'><img src = '../image/icons/ie-night-head.p
             }
         }
 
+    // $query_purchased = "SELECT * FROM tbl_ordering WHERE merchandise_id=$mer_id";
+    // $result_purchased = mysqli_query($db, $query_purchased);
+    // $mer_purchased = 0;
+    // while($list_purchased = mysqli_fetch_array($result_purchased)) 
+    // {
+    //     $mer_purchased += $list_purchased["quantity"];
+    // }
+
+    // //echo ("$mer_purchased");
+    // $mer_left = $mer_stock - $mer_purchased;
+
         echo("
         <form action='../shopping.php' method=GET>
             <fieldset >

@@ -13,6 +13,7 @@ require("header.php");
     <title>Payment</title>
 </head>
 <body>
+        <a href = "shopping.php"> Back </a><br>
     <div><h2>Payment</h2></div>
     <form action="payment_handler.php" method=POST enctype="multipart/form-data">
         <?php
@@ -46,7 +47,21 @@ require("header.php");
         ?>
         <!--end test-->
 
-        <h4>Shipping Address: </h4><textarea name="shipping_address" placeholder="Enter Shipping Address here.." required></textarea><br><br>
+        <h4>Shipping Address: </h4>
+            <table>
+            <tr>
+                <td><input type=TEXT name="address" id="address" placeholder="address" required></td>
+                <td><input type=TEXT name="road" id="road" placeholder="road" required></td>
+                <td><input type=TEXT name="district" id="district" placeholder="district" required></td>
+                <td><input type=TEXT name="county" id="county" placeholder="county" required></td>
+
+            </tr>
+            <tr>
+                <td><input type=TEXT name="province" id="province" placeholder="province" required></td>
+                <td><input type=TEXT name="zipCode" id="zipCode" placeholder="ZIP CODE" required></td>
+            </tr>
+        </table>
+            <br><br>
         
         <div><h4>Total Price: <?php echo("$".$ttl_price) ?></h4></div>
         
