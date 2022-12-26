@@ -149,7 +149,7 @@ require("admin_header.php");
             </tr>
             <tr>
                 <td><label for="tel">telephone: </label></td>
-                <td><input type="tel" id="tel" name="staff_tel" value="<?php echo($edit_tel) ?>" placeholder="0XX-XXX-XXXX" pattern="0[0-9]{2}-[0-9]{3}-[0-9]{4}" requierd></td>
+                <td><input type="tel" id="tel" name="staff_tel" value="<?php echo($edit_tel) ?>" placeholder="0XX-XXX-XXXX" pattern="0[0-9]{2}-[0-9]{3}-[0-9]{4}" required></td>
             </tr>
         </table>
         <?php

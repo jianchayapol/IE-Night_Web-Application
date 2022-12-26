@@ -58,44 +58,46 @@ require("admin_header.php");
     <?php
 
         #filter by cmd
+        $filter_type="";
         $query_cmd = "";
+        $filter_alt = "";
         if (isset($_GET['filter_by'])){
             $filter_type = $_GET['filter_by'];
             $query_cmd = $query_cmd.$filter_type;
         }
 
         #search by ID
+        $search_id="";
         $search_id_cmd = "";
         if (isset($_GET['searched_id']) && $_GET['searched_id'] != "" ){
             $search_id= $_GET['searched_id'];
             if (isset($_GET['filter_by'])){
-                $search_id_cmd= $search_id_cmd.' AND id='.$search_id;
+                $search_id_cmd= $search_id_cmd.' AND (id LIKE "%'.$search_id.'%")';
             }else{
-                $search_id_cmd= $search_id_cmd.' WHERE id='.$search_id;
+                $search_id_cmd= $search_id_cmd.' WHERE id LIKE "%'.$search_id.'%"';
             }
         }
+
+        if($search_id!="") { echo ('search: '.$search_id); }
+        if($filter_type==" WHERE payment_status=1") { echo "* Only Approved Orders";}
+        if($filter_type==" WHERE payment_status=0") { echo "* Only Unapproved Orders";}
 
         require("../connection.php");
         $query = ("SELECT * FROM tbl_orders".$query_cmd.$search_id_cmd);
         $result = mysqli_query($db, $query);
         $num_row = mysqli_num_rows($result);
-
         ?>
 
     <form action="admin_update_order_handler.php" method=POST>
 
         <?php
-
         echo "<table style='width : 100%' >";
-
         if($num_row>0){
             echo "<p>[ $num_row results found] </p>";
         }else{
             echo "<p> [ <u>No</u> matched result found] </p>";
         }
-
-        echo ("
-                <tr style='background-color:darkred; color:white'>
+        echo ("<tr style='background-color:darkred; color:white'>
                     <td>id</td>
                     <td>customer</td>
                     <td>timestamp</td>
@@ -105,12 +107,10 @@ require("admin_header.php");
                     <td>order details</td>
                     <td>shipping status</td>
                     <td>shipping address</td>
-                    
                 </tr>
             ");
 
         while ($list = mysqli_fetch_array($result)) {
-
             $id = $list["id"];
             $customer = $list["customer_user"];
             $timestamp = $list["timestamp"];
@@ -118,21 +118,29 @@ require("admin_header.php");
             $payment_upload = "<img src='../image/banking/$payment_filename' width='120' alt='no payment uploaded'";
             $total_price = $list["ttl_price"];
             $payment_status = $list["payment_status"];
-            $shipping_address = $list["shipping_address"];
+            $address = $list["address"];
+            $road = $list["road"];
+            $district = $list["district"];
+            $county = $list["county"];
+            $province = $list["province"];
+            $zipCode = $list["zip_code"];
             $shipping_status = $list["shipping_status"];
 
+            $payment_check_color = 'white';
             if ($payment_status == 1) {
                 $payment_check = '<input type="checkbox" name="payment_added_id[]" value=' . $id . ' checked><br> ';
+                $payment_check_color = 'lightgreen';
             } else {
-                $payment_check = '<input type="checkbox" name="payment_added_id[]" value=' . $id . ' ><br>';
+                $payment_check = '<input type="checkbox" name="payment_added_id[]" value=' . $id . ' unchecked><br> ';
             }
 
+            $shipping_check_color = 'white';
             if ($shipping_status == 1) {
                 $shipping_check = '<input type="checkbox" name="shipping_added_id[]" value=' . $id . ' checked><br> ';
+                $shipping_check_color = 'lightgreen';
             } else {
-                $shipping_check = '<input type="checkbox" name="shipping_added_id[]" value=' . $id . ' ><br>';
+                $shipping_check = '<input type="checkbox" name="shipping_added_id[]" value=' . $id . ' unchecked><br>';
             }
-
 
             #query merchandise lists of this order
             $query2 = "SELECT merch.name as merchandise_name, merch.id as merchandise_id,ord.quantity as quantity 
@@ -149,24 +157,23 @@ require("admin_header.php");
                 $order_merch = $order_merch.$quan_i.' x  '.$merch_i.' [ID:'.$merch_id_i.']   <br>';
             }
 
-            echo ("
-                <tr>
+            echo ("<tr>
                     <td>$id</td>
                     <td>$customer</td>
                     <td>$timestamp</td>
                     <td>$payment_upload</td>
                     <td><b>$total_price<b></td>
-                    <td>$payment_check</td>
+                    <td style='background-color:$payment_check_color'>$payment_check</td>
                     <td>$order_merch</td>
-                    <td>$shipping_check</td>
-                    <td>$shipping_address</td>
+                    <td style='background-color:$shipping_check_color'>$shipping_check</td>
+                    <td>$address $road $district $county $province $zipCode</td>
+                    <td><a href='delete_order_handler?order_id=$id'>Delete</a></td>
                 </tr>
                 <br>
             ");
-        }
-
-        echo "</table>";
+        }   
         ?>
+        </table>
 
         <br><br><input type='submit' value='Save Changes'>
 

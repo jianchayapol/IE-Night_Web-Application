@@ -23,6 +23,10 @@ $query4 = "UPDATE tbl_orders
             SET shipping_status = 1 WHERE id IN $shipping_checked";
 mysqli_query($db, $query4);
 
+echo '<script type="Text/JavaScript"> 
+            alert("Updated!");
+            </script>';
+
 header("refresh: 0; url=manage_order.php");
 
 ?>
