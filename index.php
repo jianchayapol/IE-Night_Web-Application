@@ -1,6 +1,8 @@
 <?php
+require("connection.php");
 echo("<img src = './image/icons/ie-night-head.png' width=50%><br>");
 echo ("<a href = 'login.php'>log in</a>")
+
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +13,24 @@ echo ("<a href = 'login.php'>log in</a>")
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
 </head>
+
+<style>
+        .ranktable {
+            border-collapse: collapse;
+            width: 500;
+        }
+        tr,td {
+            background-color: whitesmoke;
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #DDD;
+        }
+        .hover-table:hover {
+            background-color: maroon;
+            color: white
+        }
+    </style>
+
 <body>
     <div>
         <h2>IE NIGHT 2022 Ticket</h2>
@@ -20,40 +40,67 @@ echo ("<a href = 'login.php'>log in</a>")
             <tr>
                 <td><img src="./image/merchandises/001" alt="ie night 2022 ticket" height = 100></td>
                 <td>
-                    <p>detail</p>
-                    <a href = "ie_night_detail.php">LEARN MORE</a>
+                    <p><h3>Ticket Pass for IE night event<br> held on 4.2.2023</h3></p>
+                    <a href = "ie_night_detail.php" style="color: blue; size: 45px;">LEARN MORE</a>
                 </td>
             </tr>
         </table>
     </div>
     <!-- <div background-color: gray></div> -->
-    <div>
-        <h2>MERCHANDISES</h2>
-    </div>
-    <div>
-        <table>
-            <tr>
-                <td>
-                    <img src="./image/merchandises/002" alt="" width = 100 href = "login.php">
-                </td>
-                <td>
-                    <img src="./image/merchandises/003" alt="" width = 100>
-                </td>
-                <td>
-                    <img src="./image/merchandises/004" alt="" width = 100>
-                </td>
-                <td>
-                    <img src="./image/merchandises/005" alt="" width = 100>
-                </td>
-            </tr>
+    
 
-            <tr>
-                <td>Pen</td>
-            </tr>
+    <fieldset >
+            <legend><h2> MERCHANDISES </h2> </legend>
+
+    <?php
+        $query = 
+        "SELECT merch.name as product_name, 
+        merch.picture as product_pic,
+        merch.price as price,
+        SUM(ordering.quantity) as total_sold 
+    FROM tbl_ordering ordering, tbl_merchandises merch
+    WHERE ordering.merchandise_id = merch.id
+    GROUP BY ordering.merchandise_id
+    ORDER BY SUM(ordering.quantity) DESC
+    LIMIT 3 ;";
+    
+    $result = mysqli_query($db, $query);
+    
+    ?>
+
+    <div class ="ranktable">
+        <table style="background-color:whitesmoke; 
+                    border: 2px solid white;
+                    border-collapse: collapse;
+                    width:500;">
+        <?php
+        $ranking = 1;
+        echo("<h3 style='color: maroon' > * BEST SELLER *</h3>");
+        while($list_show = mysqli_fetch_array($result)) 
+                {
+                    $mer_name = $list_show["product_name"]; 
+                    $mer_pic = $list_show["product_pic"];
+                    $mer_price = $list_show["price"];
+                    $total_sold = $list_show["total_sold"];
+                    if($mer_pic != "") {
+                        $mer_pic = "<img src='./image/merchandises/$mer_pic' height='100' width='100'";
+                    }
+                    echo(
+                        "<td class='hover-table'><center>
+                            <h3>  #$ranking   $mer_name</h3>
+                            $mer_pic<br>
+                            <h3> $mer_price  Baht</h3>
+                            </center>
+                        </td>"
+                    );
+                    $ranking+=1;
+                }
+            ?>
         </table>
     </div>
-    <div><br><a href="shopping.php">NEXT TO SHOPPING</a></div>
-    
+    <br>
+    <div><br><a href="shopping.php" style="color: blue; size: 50px;">NEXT TO SHOPPING</a></div>
+    <br>
 
     
 </body>

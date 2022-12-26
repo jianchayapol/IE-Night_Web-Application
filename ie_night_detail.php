@@ -28,25 +28,19 @@ require("connection.php");
             - networking session <br>
             - celebration <br>
             - after-party <br>
+            <br><h4>click to see <a style='color:blue' href='./stats.php'> Statistics </a></h4><br>
             <h3>SEE YOU ON 4.2.2023</h3>
             </p>
         </div>
     </div>
 
-    <table>
-        <!-- <tr>
-            <td> Quantity : </td>
-            <td><input type='number' min=0 value=0 required></td>
-        </tr> -->
-
-    </table>
 
     <form action = "merchandise1.php" method = POST>
-        <input type="submit" value = "buy ticket now" style="background-color:lightgoldenrodyellow; color:darkred; size: 40px;" >
+        <input type="submit" value = "buy ticket now" style="background-color: #FFD300 ; color:blue; size: 40px;" >
     </form>
 
     <div>
-        <a href="homepage_logged.php">Back</a>
+        <a style="color:blue" href="homepage_logged.php">Back</a>
     </div>
 </body>
 </html>
